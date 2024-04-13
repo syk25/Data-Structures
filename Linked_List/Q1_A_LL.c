@@ -130,9 +130,6 @@ int insertSortedLL(LinkedList *ll, int item)
 		cur = ll->head;
 		int index = 0;
 
-
-		
-
 		while ((cur->item < item) && cur->next != NULL)
 		{
 			pre = cur;
