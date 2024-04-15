@@ -86,9 +86,36 @@ int main()
 
 ////////////////////////////////////////////////////////////////////////
 
-int moveMaxToFront(ListNode **ptrHead)
+int moveMaxToFront(ListNode **ptrHead) 
 {
-    /* add your code here */
+	ListNode *cur, *pre;
+	cur = *ptrHead; // 이중포인터를 매개변수로 받은 경우, 값에 접근하기 위해 역참조 연산자 활용
+	int max = 0, index = 0, index_max = 0;
+	while(cur != NULL)
+	{
+		if(max < cur->item)
+		{
+			max = cur->item;
+			index_max = index;
+		}
+		cur = cur->next;
+		index += 1;
+	}
+
+	ListNode *temp = malloc(sizeof(ListNode));
+	temp->item = max;
+	temp->next = *ptrHead;
+	*ptrHead = temp; // 이중포인터에 접근해서 갱신하는 법
+
+	cur = *ptrHead;
+	cur = cur->next;
+
+	while(cur->item != max)
+	{
+		pre = cur;
+		cur = cur->next;
+	}
+	pre->next = cur->next;
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -108,6 +135,8 @@ void printList(LinkedList *ll){
 		cur = cur->next;
 	}
 	printf("\n");
+
+
 }
 
 ListNode * findNode(LinkedList *ll, int index){
