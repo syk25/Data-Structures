@@ -86,6 +86,42 @@ int main()
 
 void moveOddItemsToBack(LinkedList *ll)
 {
+	LinkedList *temp = malloc(sizeof(LinkedList));
+	temp->head = NULL;
+	temp->size = 0;
+
+	ListNode *cur = ll->head;
+	int locale = 0, index = 0;
+
+	while(cur->next != NULL)
+	{
+		if(cur->item % 2 == 0)
+		{
+			locale += 1;
+			cur = cur->next;
+			continue;
+		}
+		else
+		{
+			insertNode(temp, index, cur->item);
+			index += 1;
+			cur = cur->next;
+			removeNode(ll, locale);
+		}
+	}
+
+	if(ll->head->item % 2 == 1)
+	{
+		insertNode(temp, index, cur->item);
+			index += 1;
+			removeNode(ll, locale);
+	}
+
+
+	cur->next = temp->head;
+
+	temp = NULL;
+
 	/* add your code here */
 }
 
