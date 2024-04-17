@@ -114,9 +114,46 @@ int main()
 //////////////////////////////////////////////////////////////////////////////////
 
 int identical(BTNode *tree1, BTNode *tree2)
-
 {
-   /* add your code here */
+    // 스택 두개 만들기
+    // 스택에 트리의 노드를 중위순회 순서에 따라 넣기 1, 2
+    // 스택 둘 다 노드가 남아 있는 동안 스택에서 노드를 하나씩 꺼내서 비교하기
+        // 값이 다르다면 중단하고 같지 않다고 반환하기
+    // 스택 안에 노드가 남아 있는 지 확인하기
+        // 하나라도 남아있다면 같지 않다고 반환하기
+        // 둘다 비어 있다면 같다고 반환하기
+    
+    // 필요한 변수, 포인터, 구조체: 스택 구조체 2개, 노드 포인터 2개
+    Stack *s1 = malloc(sizeof(Stack)), *s2 = malloc(sizeof(Stack));
+    BTNode *cur1, *cur2;
+
+    push(s1, tree1);
+    push(s2, tree2);
+    cur1 = s1->top->btnode;
+    cur2 = s2->top->btnode;
+
+    while(s1->top->btnode != NULL && s2->top->btnode != NULL)
+    {
+        cur1 = pop(s1);
+        cur2 = pop(s2);
+
+        if (cur1->item != cur2->item)
+        {
+            return 0;
+        }
+
+        push(s1, cur1->left);
+        push(s1, cur1->right);
+        push(s2, cur2->left);
+        push(s2, cur2->right);
+    }
+
+    if((s1->top == NULL && s2->top != NULL) || (s1->top != NULL && s2->top == NULL))
+    {
+        return 0;
+    }
+
+    return 1;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
