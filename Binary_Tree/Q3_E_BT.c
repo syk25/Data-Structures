@@ -99,9 +99,31 @@ int main()
 //////////////////////////////////////////////////////////////////////////////////
 
 int countOneChildNodes(BTNode *node)
-
 {
+    int childs = 0;
     /* add your code here */
+
+    // 트리가 비어 있는 경우
+    if(node == NULL)
+    {
+        return 0;
+    }
+
+    // 트리에게 자식 노드가 없는 경우
+    if (node->left == NULL && node->right == NULL){
+        return 0;
+    }
+
+    // 트리에게 자식 노드가 2개인 경우
+    if (node->left != NULL && node->right != NULL){
+        return countOneChildNodes(node->left) + countOneChildNodes(node->right);
+    }
+
+    // 자식 노드가 하나라도 있는 경우
+    if(node->left != NULL || node->right != NULL)
+    {
+        return countOneChildNodes(node->left) + countOneChildNodes(node->right) + 1;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
