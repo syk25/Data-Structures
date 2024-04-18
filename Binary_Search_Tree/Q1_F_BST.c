@@ -13,23 +13,24 @@ Purpose: Implementing the required functions for Question 1 */
 #define BUFFER_SIZE 1024
 ///////////////////////////////////////////////////////////////////////////////////
 
-typedef struct _bstnode{
+typedef struct _bstnode
+{
 	int item;
 	struct _bstnode *left;
 	struct _bstnode *right;
-} BSTNode;   // You should not change the definition of BSTNode
+} BSTNode; // You should not change the definition of BSTNode
 
-typedef struct _QueueNode {
+typedef struct _QueueNode
+{
 	BSTNode *data;
 	struct _QueueNode *nextPtr;
-}QueueNode; // You should not change the definition of QueueNode
-
+} QueueNode; // You should not change the definition of QueueNode
 
 typedef struct _queue
 {
 	QueueNode *head;
 	QueueNode *tail;
-}Queue; // You should not change the definition of queue
+} Queue; // You should not change the definition of queue
 
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -38,7 +39,7 @@ void levelOrderTraversal(BSTNode *node);
 
 void insertBSTNode(BSTNode **node, int value);
 
-BSTNode* dequeue(QueueNode **head, QueueNode **tail);
+BSTNode *dequeue(QueueNode **head, QueueNode **tail);
 void enqueue(QueueNode **head, QueueNode **tail, BSTNode *node);
 int isEmpty(QueueNode *head);
 void removeAll(BSTNode **node);
@@ -50,14 +51,13 @@ int main()
 	int c, i;
 	c = 1;
 
-	//Initialize the Binary Search Tree as an empty Binary Search Tree
+	// Initialize the Binary Search Tree as an empty Binary Search Tree
 	BSTNode *root;
 	root = NULL;
 
 	printf("1: Insert an integer into the binary search tree;\n");
 	printf("2: Print the level-order traversal of the binary search tree;\n");
 	printf("0: Quit;\n");
-
 
 	while (c != 0)
 	{
@@ -83,7 +83,6 @@ int main()
 			printf("Choice unknown;\n");
 			break;
 		}
-
 	}
 
 	return 0;
@@ -91,20 +90,65 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////////////
 
-void levelOrderTraversal(BSTNode* root)
+void levelOrderTraversal(BSTNode *root)
 {
+	Queue *q = malloc(sizeof(Queue));
+	QueueNode **head, **tail;
+	q->head = NULL;
+	q->tail = NULL;
+	
+	head = &(q->head);
+	tail = &(q->tail);
 
-    /* add your code here */
+
+	BSTNode *cur;
+
+	// 트리가 없는 경우
+	if (root == NULL)
+	{
+		return;
+	}
+
+	// 루트노드만 존재하는 경우
+	if (root->left == NULL && root->right == NULL)
+	{
+		printf("%d ", root->item);
+		return;
+	}
+
+	// 자식노드도 존재하는 경우
+	cur = root;
+	if (root->left != NULL || root->right != NULL)
+	{
+		enqueue(head, tail, cur);
+		// 큐가 빌때까지 레벨순회
+		while (!isEmpty(q->head))
+		{
+			cur = dequeue(head, tail);
+			printf("%d ", cur->item);
+
+			if (cur->left != NULL)
+			{
+				enqueue(head, tail, cur->left);
+			}
+			if (cur->right != NULL)
+			{
+				enqueue(head, tail, cur->right);
+			}
+		}
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void insertBSTNode(BSTNode **node, int value){
+void insertBSTNode(BSTNode **node, int value)
+{
 	if (*node == NULL)
 	{
 		*node = malloc(sizeof(BSTNode));
 
-		if (*node != NULL) {
+		if (*node != NULL)
+		{
 			(*node)->item = value;
 			(*node)->left = NULL;
 			(*node)->right = NULL;
@@ -116,7 +160,7 @@ void insertBSTNode(BSTNode **node, int value){
 		{
 			insertBSTNode(&((*node)->left), value);
 		}
-		else if (value >(*node)->item)
+		else if (value > (*node)->item)
 		{
 			insertBSTNode(&((*node)->right), value);
 		}
@@ -134,32 +178,37 @@ void enqueue(QueueNode **headPtr, QueueNode **tailPtr, BSTNode *node)
 	QueueNode *newPtr = malloc(sizeof(QueueNode));
 
 	// if newPtr does not equal NULL
-	if (newPtr != NULL) {
+	if (newPtr != NULL)
+	{
 		newPtr->data = node;
 		newPtr->nextPtr = NULL;
 
 		// if queue is empty, insert at head
-		if (isEmpty(*headPtr)) {
+		if (isEmpty(*headPtr))
+		{
 			*headPtr = newPtr;
 		}
-		else { // insert at tail
+		else
+		{ // insert at tail
 			(*tailPtr)->nextPtr = newPtr;
 		}
 
 		*tailPtr = newPtr;
 	}
-	else {
+	else
+	{
 		printf("Node not inserted");
 	}
 }
 
-BSTNode* dequeue(QueueNode **headPtr, QueueNode **tailPtr)
+BSTNode *dequeue(QueueNode **headPtr, QueueNode **tailPtr)
 {
 	BSTNode *node = (*headPtr)->data;
 	QueueNode *tempPtr = *headPtr;
 	*headPtr = (*headPtr)->nextPtr;
 
-	if (*headPtr == NULL) {
+	if (*headPtr == NULL)
+	{
 		*tailPtr = NULL;
 	}
 
